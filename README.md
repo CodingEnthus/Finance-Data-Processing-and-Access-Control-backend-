@@ -91,7 +91,7 @@ Access control is implemented using middleware.
 ### 1. Clone Repository
 
 ```bash
-git clone <your-repo-link>
+git clone https://github.com/CodingEnthus/Finance-Data-Processing-and-Access-Control-backend-.git
 cd zorvyn-backend
 ```
 
