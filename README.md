@@ -200,6 +200,71 @@ role: analyst
 ```
 
 ---
+## 🌐 Live API
+
+Base URL:
+https://finance-data-processing-5n56.onrender.com
+
+---
+
+## 🔍 How to Use
+
+This is a backend API. Use Thunder Client or Postman to test endpoints.
+
+### Get Records
+
+GET /api/records
+Header:
+role: viewer
+
+Full URL:
+https://finance-data-processing-5n56.onrender.com/api/records
+
+---
+
+### Create Record
+
+POST /api/records
+Header:
+role: admin
+
+Body:
+{
+"amount": 5000,
+"type": "income",
+"category": "salary"
+}
+
+---
+
+### Dashboard Summary
+
+GET /api/dashboard/summary
+Header:
+role: analyst
+
+Full URL:
+https://finance-data-processing-5n56.onrender.com/api/dashboard/summary
+
+---
+
+## 🔑 Role Header Required
+
+All requests require a header:
+
+Key: role
+Values:
+
+* admin
+* analyst
+* viewer
+
+---
+
+## ⚠️ Note
+
+Authentication is simulated using headers to focus on backend design, role-based access control, and API architecture.
+
 
 ## 🧠 Design Decisions
 
