@@ -2,9 +2,16 @@
 
 ## 📌 Overview
 
-This project is a backend system for managing financial records with role-based access control and dashboard analytics.
+This project is a backend system for managing financial records with role-based access control (RBAC) and dashboard analytics.
 
-It allows different types of users to interact with financial data based on their roles while providing summary insights for a dashboard.
+It allows different users to interact with financial data based on their roles while providing summary insights for a dashboard.
+
+---
+
+## 🌐 Live API
+
+Base URL:
+https://finance-data-processing-5n56.onrender.com
 
 ---
 
@@ -29,7 +36,7 @@ It allows different types of users to interact with financial data based on thei
   * Access dashboard analytics
 * **Viewer**
 
-  * Read-only access to records
+  * Read-only access
 
 Access control is implemented using middleware.
 
@@ -38,13 +45,14 @@ Access control is implemented using middleware.
 ### 💰 Financial Records
 
 * Create, Read, Update, Delete records
-* Fields:
 
-  * Amount
-  * Type (income / expense)
-  * Category
-  * Date
-  * Notes
+Fields:
+
+* Amount
+* Type (income / expense)
+* Category
+* Date
+* Notes
 
 ---
 
@@ -54,7 +62,7 @@ Access control is implemented using middleware.
 
   * Type
   * Category
-* Pagination support:
+* Pagination:
 
   * `/api/records?page=1&limit=5`
 
@@ -65,7 +73,7 @@ Access control is implemented using middleware.
 * Total Income
 * Total Expense
 * Net Balance
-* Category-wise summary (aggregation)
+* Category-wise summary
 
 ---
 
@@ -74,6 +82,15 @@ Access control is implemented using middleware.
 * Required field validation
 * Invalid input handling
 * Proper HTTP status codes
+
+---
+
+## ✨ Additional Features
+
+* Pagination for efficient data handling
+* Query-based filtering (search support)
+* Modular architecture (controllers, routes, models)
+* Middleware-based RBAC
 
 ---
 
@@ -101,9 +118,9 @@ cd zorvyn-backend
 npm install
 ```
 
-### 3. Create `.env` file
+### 3. Create `.env`
 
-```env
+```
 MONGO_URI=your_mongodb_connection_string
 ```
 
@@ -113,7 +130,7 @@ MONGO_URI=your_mongodb_connection_string
 npm run dev
 ```
 
-Server will run on:
+Server runs on:
 
 ```
 http://localhost:5000
@@ -126,27 +143,29 @@ http://localhost:5000
 ### 👤 Users
 
 * `POST /api/users` → Create user
-* `GET /api/users` → Get all users
+* `GET /api/users` → Get users
 
 ---
 
 ### 💰 Records
 
-* `POST /api/records` → Create record (Admin only)
-* `GET /api/records` → Get records (All roles)
-* `PUT /api/records/:id` → Update record (Admin only)
-* `DELETE /api/records/:id` → Delete record (Admin only)
+* `POST /api/records` → Admin only
+* `GET /api/records` → All roles
+* `PUT /api/records/:id` → Admin only
+* `DELETE /api/records/:id` → Admin only
 
 ---
 
 ### 📊 Dashboard
 
-* `GET /api/dashboard/summary` → Summary (Admin, Analyst)
-* `GET /api/dashboard/category` → Category summary (Admin, Analyst)
+* `GET /api/dashboard/summary` → Admin, Analyst
+* `GET /api/dashboard/category` → Admin, Analyst
 
 ---
 
-## 🔑 Headers for Role Testing
+## 🔑 Role Header Required
+
+All requests require:
 
 | Key  | Value   |
 | ---- | ------- |
@@ -161,6 +180,7 @@ http://localhost:5000
 ### Create Record (Admin)
 
 POST `/api/records`
+
 Header:
 
 ```
@@ -182,6 +202,7 @@ Body:
 ### Get Records (Viewer)
 
 GET `/api/records?page=1&limit=5`
+
 Header:
 
 ```
@@ -193,6 +214,7 @@ role: viewer
 ### Dashboard Summary (Analyst)
 
 GET `/api/dashboard/summary`
+
 Header:
 
 ```
@@ -200,86 +222,21 @@ role: analyst
 ```
 
 ---
-## 🌐 Live API
-
-Base URL:
-https://finance-data-processing-5n56.onrender.com
-
----
-
-## 🔍 How to Use
-
-This is a backend API. Use Thunder Client or Postman to test endpoints.
-
-### Get Records
-
-GET /api/records
-Header:
-role: viewer
-
-Full URL:
-https://finance-data-processing-5n56.onrender.com/api/records
-
----
-
-### Create Record
-
-POST /api/records
-Header:
-role: admin
-
-Body:
-{
-"amount": 5000,
-"type": "income",
-"category": "salary"
-}
-
----
-
-### Dashboard Summary
-
-GET /api/dashboard/summary
-Header:
-role: analyst
-
-Full URL:
-https://finance-data-processing-5n56.onrender.com/api/dashboard/summary
-
----
-
-## 🔑 Role Header Required
-
-All requests require a header:
-
-Key: role
-Values:
-
-* admin
-* analyst
-* viewer
-
----
-
-## ⚠️ Note
-
-Authentication is simulated using headers to focus on backend design, role-based access control, and API architecture.
-
 
 ## 🧠 Design Decisions
 
-* Used middleware for clean role-based access control
-* Implemented aggregation for efficient dashboard insights
-* Added pagination to handle large datasets
-* Kept architecture modular (controllers, routes, models)
+* Used middleware for RBAC
+* Implemented aggregation for analytics
+* Added pagination for scalability
+* Kept architecture modular and maintainable
 
 ---
 
 ## 📌 Assumptions
 
-* Authentication is mocked using request headers
-* Focus is on backend logic rather than full authentication system
-* Single environment setup for simplicity
+* Authentication is mocked using headers
+* Focus is on backend logic over full auth system
+* Designed for demonstration purposes
 
 ---
 
@@ -287,9 +244,8 @@ Authentication is simulated using headers to focus on backend design, role-based
 
 * JWT Authentication
 * Advanced analytics (monthly trends)
-* Search functionality
-* Unit & integration testing
 * API documentation (Swagger)
+* Unit & integration testing
 
 ---
 
