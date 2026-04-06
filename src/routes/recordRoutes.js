@@ -10,7 +10,6 @@ const {
 
 const { checkRole } = require('../middleware/authMiddleware');
 
-// 🔐 Apply RBAC
 router.post('/', checkRole(['admin']), createRecord);
 router.get('/', checkRole(['admin', 'analyst', 'viewer']), getRecords);
 router.put('/:id', checkRole(['admin']), updateRecord);
