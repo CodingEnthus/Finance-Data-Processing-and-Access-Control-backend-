@@ -27,3 +27,15 @@ exports.getUsers = async (req, res) => {
     const users = await User.find();
     res.json(users);
 };
+exports.deleteUser = async (req, res) => {
+    try {
+        await User.findByIdAndDelete(req.params.id);
+
+        res.status(200).json({ message: 'User deleted successfully' });
+    } catch (err) {
+        res.status(500).json({
+            error: 'Failed to delete user',
+            message: err.message
+        });
+    }
+};
