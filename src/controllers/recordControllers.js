@@ -1,80 +1,70 @@
 const Record = require('../models/Record');
+
+// ✅ CREATE RECORD (with user)
 exports.createRecord = async (req, res) => {
-    try {
-        const { amount, type, category } = req.body;
+  try {
+    const record = await Record.create({
+      ...req.body,
+      user: req.user.id, // 🔥 THIS LINE IS EVERYTHING
+    });
 
-        // validation
-        if (!amount || !type || !category) {
-            return res.status(400).json({
-                error: 'Amount, type, and category are required'
-            });
-        }
+    res.status(201).json(record);
 
-        if (!['income', 'expense'].includes(type)) {
-            return res.status(400).json({
-                error: 'Type must be income or expense'
-            });
-        }
-
-        const record = await Record.create(req.body);
-
-        res.status(201).json(record);
-
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
+
+// ✅ GET RECORDS (only user's records)
 exports.getRecords = async (req, res) => {
-    try {
-        let { page = 1, limit = 5, type, category } = req.query;
+  try {
+    const records = await Record.find({
+      user: req.user.id, // 🔥 FILTERING LOGIC
+    });
 
-        page = parseInt(page);
-        limit = parseInt(limit);
+    res.json(records);
 
-        const skip = (page - 1) * limit;
-        let filter = {};
-
-        if (type) {
-            filter.type = type;
-        }
-
-        if (category) {
-            filter.category = category;
-        }
-
-        const records = await Record.find(filter)
-            .skip(skip)
-            .limit(limit);
-
-        const total = await Record.countDocuments(filter);
-
-        res.json({
-            totalRecords: total,
-            currentPage: page,
-            totalPages: Math.ceil(total / limit),
-            data: records
-        });
-
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
+
+
+// ✅ UPDATE RECORD (only own record)
 exports.updateRecord = async (req, res) => {
     try {
-        const record = await Record.findByIdAndUpdate(
-            req.params.id,
+        const record = await Record.findOneAndUpdate(
+            { _id: req.params.id, user: req.user.id }, // ✅ SECURITY
             req.body,
             { new: true }
         );
+
+        if (!record) {
+            return res.status(404).json({ error: 'Record not found or unauthorized' });
+        }
+
         res.json(record);
+
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
 };
+
+
+// ✅ DELETE RECORD (only own record)
 exports.deleteRecord = async (req, res) => {
     try {
-        await Record.findByIdAndDelete(req.params.id);
+        const record = await Record.findOneAndDelete({
+            _id: req.params.id,
+            user: req.user.id // ✅ SECURITY
+        });
+
+        if (!record) {
+            return res.status(404).json({ error: 'Record not found or unauthorized' });
+        }
+
         res.json({ message: 'Record deleted' });
+
     } catch (err) {
         res.status(400).json({ error: err.message });
     }

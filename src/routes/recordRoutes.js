@@ -2,17 +2,24 @@ const express = require('express');
 const router = express.Router();
 
 const {
-    createRecord,
-    getRecords,
-    updateRecord,
-    deleteRecord
+  createRecord,
+  getRecords,
+  updateRecord,
+  deleteRecord
 } = require('../controllers/recordControllers');
 
-const { checkRole } = require('../middleware/authMiddleware');
+const { protect, checkRole } = require('../middleware/authMiddleware');
 
-router.post('/', checkRole(['admin']), createRecord);
-router.get('/', checkRole(['admin', 'analyst', 'viewer']), getRecords);
-router.put('/:id', checkRole(['admin']), updateRecord);
-router.delete('/:id', checkRole(['admin']), deleteRecord);
+// ✅ CREATE
+router.post('/', protect, checkRole(['admin']), createRecord);
+
+// ✅ READ
+router.get('/', protect, checkRole(['admin', 'analyst']), getRecords);
+
+// ✅ UPDATE
+router.put('/:id', protect, checkRole(['admin']), updateRecord);
+
+// ✅ DELETE
+router.delete('/:id', protect, checkRole(['admin']), deleteRecord);
 
 module.exports = router;

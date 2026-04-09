@@ -26,7 +26,9 @@ app.get('/', (req, res) => {
 const userRoutes = require('./routes/userRoutes');
 const recordRoutes = require('./routes/recordRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
+const authRoutes = require('./routes/authRoutes');
 
+app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/records', recordRoutes);
 app.use('/api/dashboard', dashboardRoutes);
